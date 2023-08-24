@@ -31,4 +31,13 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Blog, (blog) => blog.user)
   blogs: Blog[];
+
+  @Column({ nullable: true })
+  github_url: string;
+
+  @Column({ nullable: true })
+  linkedin_url: string;
+
+  @Column({ nullable: true })
+  instagram_url: string;
 }

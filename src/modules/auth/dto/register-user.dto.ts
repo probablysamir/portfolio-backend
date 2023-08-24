@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  IsUrl,
   MinLength,
 } from 'class-validator';
 
@@ -29,6 +30,21 @@ export class RegisterUserDto {
   @IsPhoneNumber()
   readonly phone: string;
 
+  @IsString()
   @IsOptional()
-  image: any;
+  @IsUrl()
+  readonly github_url: string;
+
+  @IsString()
+  @IsOptional()
+  @IsUrl()
+  readonly linkedin_url: string;
+
+  @IsString()
+  @IsOptional()
+  @IsUrl()
+  readonly instagram_url: string;
+
+  @IsOptional()
+  avatar: any;
 }
