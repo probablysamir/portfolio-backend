@@ -1,11 +1,11 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   MinLength,
 } from 'class-validator';
-import { Column } from 'typeorm';
 
 export class RegisterUserDto {
   @IsString()
@@ -25,7 +25,10 @@ export class RegisterUserDto {
   @MinLength(8)
   readonly password: string;
 
-  @Column()
+  @IsString()
   @IsPhoneNumber()
   readonly phone: string;
+
+  @IsOptional()
+  image: any;
 }

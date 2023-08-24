@@ -17,4 +17,7 @@ export class Project extends AbstractEntity {
 
   @Column('text', { array: true })
   tags: string[];
+
+  @Column({ nullable: true, default: 'defaultproject.png' })
+  image: string;
 }

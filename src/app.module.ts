@@ -6,6 +6,8 @@ import { DATABASE } from './constants';
 import { ProjectModule } from './modules/project/project.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ContactModule } from './modules/contact/contact.module';
+import { BlogModule } from './modules/blog/blog.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { AuthModule } from './modules/auth/auth.module';
     ProjectModule,
     UserModule,
     AuthModule,
+    ContactModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

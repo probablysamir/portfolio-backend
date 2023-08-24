@@ -21,12 +21,11 @@ export class AuthService {
   ) {}
 
   async createToken(user: Partial<User>) {
-    console.log(JWT.secret);
-
     const accessToken = await this.jwtService.signAsync(
       {
         sub: user.id,
         email: user.email,
+        id: user.id,
       },
       {
         expiresIn: JWT.expiresIn,
@@ -44,7 +43,8 @@ export class AuthService {
       throw new BadRequestException('User already exists');
     const user =
       await this.userService.createUser(userInfo);
-    return user;
+    const token = await this.createToken(user);
+    return { user, jwt: token.jwt };
   }
 
   async validateUser(email: string, password: string) {

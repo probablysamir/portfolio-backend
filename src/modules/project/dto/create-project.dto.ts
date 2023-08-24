@@ -24,4 +24,7 @@ export class CreateProjectDto {
   @IsArray()
   @ArrayMinSize(1)
   tags: string[];
+
+  @IsOptional()
+  image: any;
 }

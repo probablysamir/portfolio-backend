@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
   Patch,
   Post,
@@ -10,30 +9,25 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ProjectService } from '../services/project.service';
-import { CreateProjectDto } from '../dto/create-project.dto';
+import { BlogService } from '../services/blog.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RoleType } from 'src/common/constants/role-type';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { GetUser } from 'src/decorators/getUser.decorator';
+import { CreateBlogDto } from '../dto/create-blog.dto';
 import { diskStorage } from 'multer';
 import {
   generateFileName,
   imageFileFilter,
 } from 'src/shared/providers/helpers';
-import { UpdateProjectDto } from '../dto/update-project.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { User } from 'src/modules/user/entities/user.entity';
+import { UpdateBlogDto } from '../dto/update-blog.dto';
 
-@Controller('project')
-export class ProjectController {
-  constructor(
-    private readonly projectService: ProjectService,
-  ) {}
-
-  @Get()
-  async getAllProjects() {
-    return await this.projectService.getAllProjects();
-  }
+@Controller('blog')
+export class BlogController {
+  constructor(private blogService: BlogService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -47,12 +41,14 @@ export class ProjectController {
       fileFilter: imageFileFilter,
     }),
   )
-  async createNewProject(
+  async createBlog(
+    @GetUser() user: User,
+    @Body() createBlogDto: CreateBlogDto,
     @UploadedFile() file: Express.Multer.File,
-    @Body() createProjectDto: CreateProjectDto,
   ) {
-    return await this.projectService.createProject(
-      createProjectDto,
+    return this.blogService.createBlog(
+      user,
+      createBlogDto,
       file?.filename,
     );
   }
@@ -69,22 +65,23 @@ export class ProjectController {
       fileFilter: imageFileFilter,
     }),
   )
-  async updateProject(
+  async updateBlog(
+    @GetUser() user: User,
+    @Body() updateBlogDto: UpdateBlogDto,
     @UploadedFile() file: Express.Multer.File,
-    @Body() updateProjectDto: UpdateProjectDto,
     @Param('id') id: string,
   ) {
-    return await this.projectService.updateProject(
-      updateProjectDto,
-      file?.filename,
+    return this.blogService.updateBlog(
       id,
+      updateBlogDto,
+      file?.filename,
     );
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleType.ADMIN)
-  async deleteProject(@Param('id') id: string) {
-    return await this.projectService.deleteProject(id);
+  async deleteBlog(@Param('id') id: string) {
+    return await this.blogService.deleteBlog(id);
   }
 }

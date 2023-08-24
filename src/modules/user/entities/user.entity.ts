@@ -1,6 +1,7 @@
 import { AbstractEntity } from 'src/common/abstract.entity';
 import { RoleType } from 'src/common/constants/role-type';
-import { Column, Entity } from 'typeorm';
+import { Blog } from 'src/modules/blog/entities/blog.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends AbstractEntity {
@@ -21,4 +22,13 @@ export class User extends AbstractEntity {
 
   @Column({ select: false })
   password: string;
+
+  @Column({ nullable: true, default: 'default.png' })
+  avatar: string;
+
+  @Column({ nullable: true })
+  portfolio: string;
+
+  @OneToMany(() => Blog, (blog) => blog.user)
+  blogs: Blog[];
 }
