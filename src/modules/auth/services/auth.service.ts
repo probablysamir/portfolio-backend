@@ -6,7 +6,7 @@ import { UserService } from 'src/modules/user/services/user.service';
 import { DataSource } from 'typeorm';
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
-import { UserNotFoundException } from 'src/shared/exceptions/user-not-found-exception';
+import { UserNotFoundException } from 'src/modules/user/exceptions/user-not-found-exception';
 import { UtilsService } from 'src/shared/providers/utilsService';
 import { User } from 'src/modules/user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';

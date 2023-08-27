@@ -16,11 +16,9 @@ import { User } from '../entities/user.entity';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { RoleType } from 'src/common/constants/role-type';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import {
-  generateFileName,
-  imageFileFilter,
-  pdfFileFilter,
+  imageUploadOptions,
+  pdfUploadOptions,
 } from 'src/shared/providers/helpers';
 import { Roles } from 'src/decorators/roles.decorator';
 
@@ -47,13 +45,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleType.ADMIN)
   @UseInterceptors(
-    FileInterceptor('portfolio', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: generateFileName,
-      }),
-      fileFilter: pdfFileFilter,
-    }),
+    FileInterceptor('portfolio', pdfUploadOptions),
   )
   async uploadPortfolio(
     @GetUser() user: User,
@@ -68,13 +60,7 @@ export class UserController {
   @Post('avatar')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
-    FileInterceptor('avatar', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: generateFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
+    FileInterceptor('avatar', imageUploadOptions),
   )
   async uploadAvatar(
     @GetUser() user: User,

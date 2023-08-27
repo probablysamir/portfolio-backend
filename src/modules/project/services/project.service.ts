@@ -23,6 +23,7 @@ export class ProjectService {
     filename: string,
   ) {
     payload.image = filename;
+    console.log('The filename is:', filename);
     const project: Project = await this.dataSource
       .getRepository(Project)
       .save(payload);
@@ -45,6 +46,7 @@ export class ProjectService {
       });
     if (!project)
       throw new BadRequestException('Project not found');
+
     payload.image = filename;
     const updatedProject: Project = await this.dataSource
       .getRepository(Project)

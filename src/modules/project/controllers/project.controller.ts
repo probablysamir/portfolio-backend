@@ -17,11 +17,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { RoleType } from 'src/common/constants/role-type';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import {
-  generateFileName,
-  imageFileFilter,
-} from 'src/shared/providers/helpers';
+import { imageUploadOptions } from 'src/shared/providers/helpers';
 import { UpdateProjectDto } from '../dto/update-project.dto';
 
 @Controller('project')
@@ -39,18 +35,13 @@ export class ProjectController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleType.ADMIN)
   @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: generateFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
+    FileInterceptor('image', imageUploadOptions),
   )
   async createNewProject(
     @UploadedFile() file: Express.Multer.File,
     @Body() createProjectDto: CreateProjectDto,
   ) {
+    if (file) return true;
     return await this.projectService.createProject(
       createProjectDto,
       file?.filename,
@@ -61,13 +52,7 @@ export class ProjectController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleType.ADMIN)
   @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: generateFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
+    FileInterceptor('image', imageUploadOptions),
   )
   async updateProject(
     @UploadedFile() file: Express.Multer.File,

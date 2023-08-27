@@ -1,3 +1,6 @@
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+import { diskStorage } from 'multer';
+
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return callback(
@@ -24,4 +27,20 @@ export const generateFileName = (req, file, cb) => {
   console.log(file);
 
   cb(null, `${fileNameSplit[0]}-${Date.now()}.${fileExt}`);
+};
+
+export const imageUploadOptions: MulterOptions = {
+  storage: diskStorage({
+    destination: './uploads',
+    filename: generateFileName,
+  }),
+  fileFilter: imageFileFilter,
+};
+
+export const pdfUploadOptions: MulterOptions = {
+  storage: diskStorage({
+    destination: './uploads',
+    filename: generateFileName,
+  }),
+  fileFilter: pdfFileFilter,
 };

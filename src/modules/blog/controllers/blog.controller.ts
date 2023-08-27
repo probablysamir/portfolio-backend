@@ -16,11 +16,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { RoleType } from 'src/common/constants/role-type';
 import { GetUser } from 'src/decorators/getUser.decorator';
 import { CreateBlogDto } from '../dto/create-blog.dto';
-import { diskStorage } from 'multer';
-import {
-  generateFileName,
-  imageFileFilter,
-} from 'src/shared/providers/helpers';
+import { imageUploadOptions } from 'src/shared/providers/helpers';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from 'src/modules/user/entities/user.entity';
 import { UpdateBlogDto } from '../dto/update-blog.dto';
@@ -33,13 +29,7 @@ export class BlogController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleType.ADMIN)
   @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: generateFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
+    FileInterceptor('image', imageUploadOptions),
   )
   async createBlog(
     @GetUser() user: User,
@@ -57,13 +47,7 @@ export class BlogController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleType.ADMIN)
   @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: generateFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
+    FileInterceptor('image', imageUploadOptions),
   )
   async updateBlog(
     @GetUser() user: User,
